@@ -92,78 +92,78 @@
 </template>
 
 <script>
-import { register } from "@/api/user";
+import { register } from '@/api/user'
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
       } else if (value !== this.loginForm.password) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error('两次输入密码不一致!'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "",
-        password: "",
-        email: "",
-        passwordagain: ""
+        username: '',
+        password: '',
+        email: '',
+        passwordagain: ''
       },
       loginRules: {
-        username: { required: true, trigger: "blur", message: "请输入用户名" },
-        email: { required: true, trigger: "blur", message: "请输入邮箱" },
-        password: { required: true, trigger: "blur", message: "请输入密码" },
+        username: { required: true, trigger: 'blur', message: '请输入用户名' },
+        email: { required: true, trigger: 'blur', message: '请输入邮箱' },
+        password: { required: true, trigger: 'blur', message: '请输入密码' },
         passwordagain: {
           required: true,
-          trigger: "blur",
+          trigger: 'blur',
           validator: validatePass
         }
       },
       loading: false,
-      passwordType: "password",
+      passwordType: 'password',
       redirect: undefined
-    };
+    }
   },
   watch: {
     $route: {
       handler: function(route) {
-        this.redirect = route.query && route.query.redirect;
+        this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
   methods: {
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleRegister() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           register(this.loginForm).then(res => {
-            this.$router.push({ path: "/login" });
+            this.$router.push({ path: '/login' })
             this.$message({
-              message: "注册成功，请登录",
-              type: "success"
-            });
-          });
+              message: '注册成功，请登录',
+              type: 'success'
+            })
+          })
         }
-      });
+      })
     },
     login() {
-      this.$router.push({ path: "/login" });
+      this.$router.push({ path: '/login' })
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
