@@ -29,3 +29,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function updateUser(data) {
+  return request({
+    url: '/user/updateUser',
+    method: 'post',
+    data
+  })
+}

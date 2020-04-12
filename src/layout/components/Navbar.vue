@@ -8,7 +8,7 @@
 
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="userInfo.avatar" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -24,7 +24,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <div class="name">您好：用户姓名</div>
+    <div class="name">您好：{{ username }}同学</div>
   </div>
 </template>
 
@@ -32,19 +32,34 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { getInfo } from '@/api/user'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      userInfo: {}
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'username'
     ])
   },
+  created() {
+    this.getUserinfo()
+  },
   methods: {
+    getUserinfo() {
+      getInfo().then(res => {
+        this.userInfo = res.data
+      })
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
@@ -125,7 +140,8 @@ export default {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50%;
+          object-fit: cover;
         }
 
         .el-icon-caret-bottom {
