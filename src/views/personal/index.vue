@@ -5,7 +5,7 @@
         <div class="block">
           <el-avatar :size="150" :src="userInfo.avatar" class="avatar" />
           <el-upload
-            action="http://192.168.1.108:5000/user/avatar"
+            action="http://127.0.0.1:5000/user/avatar"
             :limit="100"
             name="avatar"
             :headers="token"
@@ -23,7 +23,7 @@
               {{ userInfo.username }}
             </el-form-item>
             <el-form-item label="班级:">
-              {{ userInfo.class }}
+              {{ userInfo.className }}
             </el-form-item>
             <el-form-item label="学号:">
               {{ userInfo.studentID }}
@@ -54,7 +54,7 @@
           <el-input v-model="userInfo.username" class="input" />
         </el-form-item>
         <el-form-item label="班级:">
-          <el-input v-model="userInfo.class" class="input" />
+          <el-input v-model="userInfo.className" class="input" />
         </el-form-item>
         <el-form-item label="学号:">
           <el-input v-model="userInfo.studentID" class="input" />
@@ -81,7 +81,7 @@
       </span>
     </el-dialog>
     <el-dialog title="修改密码" :visible.sync="editPasswordWindow" width="30%">
-      <el-form ref="ruleForm" :model="ruleForm" status-icon label-width="100px" class="demo-ruleForm">
+      <el-form ref="refForm" :model="ruleForm" :rules="rules" status-icon label-width="100px" class="demo-ruleForm">
         <el-form-item label="旧密码" prop="oldpass">
           <el-input v-model="ruleForm.oldpass" type="password" autocomplete="off" class="input" />
         </el-form-item>
@@ -94,17 +94,27 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editPasswordWindow = false">取 消</el-button>
-        <el-button type="primary" @click="editPasswordWindow = false">确 定</el-button>
+        <el-button type="primary" @click="onPassword('refForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import { getInfo, updateUser } from '@/api/user'
+import { getInfo, updateUser, updataPassword } from '@/api/user'
 import { getToken } from '@/utils/auth'
+import store from '@/store'
 export default {
 
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.ruleForm.newpass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       editMessageWindow: false,
       editPasswordWindow: false,
@@ -113,6 +123,11 @@ export default {
       ruleForm: {},
       token: {
         Authorization: getToken()
+      },
+      rules: {
+        oldpass: { required: true, message: '请输入旧密码', trigger: 'blur' },
+        newpass: { required: true, message: '请输入新密码', trigger: 'blur' },
+        checkPass: { required: true, validator: validatePass, trigger: 'blur' }
       }
     }
   },
@@ -140,6 +155,11 @@ export default {
           message: '信息修改成功',
           type: 'success'
         })
+        if (this.userInfo.className === '') {
+          store.dispatch('user/getInfo').then(res => {
+            this.$router.push({ path: '/size/index' })
+          })
+        }
       })
     },
 
@@ -147,6 +167,21 @@ export default {
     editPassword() {
       this.editPasswordWindow = true
     },
+    onPassword(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          updataPassword({ password: this.ruleForm.oldpass, newPassword: this.ruleForm.checkPass }).then(res => {
+            this.editPasswordWindow = false
+            this.$message({
+              showClose: true,
+              message: '密码修改成功',
+              type: 'success'
+            })
+          })
+        }
+      })
+    },
+    // 修改头像成功调用
     uplodeSuccess(data) {
       console.log(data.code)
       if (data.code === 1) {
@@ -157,7 +192,9 @@ export default {
         message: '头像上传成功',
         type: 'success'
       })
-      this.getUserinfo()
+      store.dispatch('user/getInfo').then(res => {
+        this.getUserinfo()
+      })
     }
 
   }

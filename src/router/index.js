@@ -52,6 +52,17 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
   {
+    path: '/size',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'siz',
+        component: () => import('@/views/size/index')
+      }
+    ]
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -90,29 +101,58 @@ export const asyncRoutes = [
         path: 'courselist',
         component: () => import('@/views/course/courselist/index'),
         meta: { title: '课程表' }
+      },
+      {
+        path: 'courseupdatalist',
+        component: () => import('@/views/course/courseupdatalist/index'),
+        meta: { title: '上传课程表' }
+      },
+      {
+        path: 'edit/:id',
+        component: () => import('@/views/course/edit/index'),
+        name: 'edit',
+        meta: { title: '修改课程表', noCache: true, activeMenu: '/example/list' }
+
       }
     ]
   },
   {
-    path: '/example',
+    path: '/score ',
     component: Layout,
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    name: 'score',
+    meta: {
+      title: '成绩',
+      icon: 'nested'
+    },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'scorelist',
+        component: () => import('@/views/score/scorelist/index'),
+        meta: { title: '成绩表' }
       }
     ]
   },
+  {
+    path: '/article',
+    component: Layout,
+    name: ' article',
+    meta: { title: '共享社区', icon: 'example' },
+    children: [
+      {
+        path: 'created',
+        name: '新增文章',
+        component: () => import('@/views/article/created/index'),
+        meta: { title: '新增文章', icon: 'table' }
+      },
+      {
+        path: 'list',
+        name: '文章列表',
+        component: () => import('@/views/article/list/index'),
+        meta: { title: '文章列表', icon: 'tree' }
+      }
+    ]
+  },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
 

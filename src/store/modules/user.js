@@ -6,16 +6,17 @@ const state = {
   token: getToken(),
   username: '',
   avatar: '',
-  introduction: '',
-  roles: []
+  className: '',
+  roles: [],
+  id: ''
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
+  SET_CLASSNAME: (state, className) => {
+    state.className = className
   },
   SET_NAME: (state, username) => {
     state.username = username
@@ -25,6 +26,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ID: (state, id) => {
+    state.id = id
   }
 }
 
@@ -56,10 +60,8 @@ const actions = {
           if (!data) {
             reject('Verification failed, please Login again.')
           }
+          const { roles, username, avatar, className, id } = data
           console.log(data)
-
-          const { roles, username, avatar, introduction } = data
-
           // roles must be a non-empty array
           if (!roles || roles.length <= 0) {
             reject('getInfo: roles must be a non-null array!')
@@ -68,7 +70,8 @@ const actions = {
           commit('SET_ROLES', roles)
           commit('SET_NAME', username)
           commit('SET_AVATAR', avatar)
-          commit('SET_INTRODUCTION', introduction)
+          commit('SET_CLASSNAME', className)
+          commit('SET_ID', id)
           resolve(data)
         })
         .catch((error) => {

@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { getCourse } from '@/api/course'
+import store from '@/store'
 export default {
   components: {},
   props: {},
@@ -46,44 +48,7 @@ export default {
     return {
       week: 1,
       num: [0, 1, 2, 3, 4],
-      list: [
-        [
-          { courseName: '', week: [], teacher: '', classroom: '' },
-          { courseName: '高数1-2', week: [1, 2, 3, 5, 6], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数1-3', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数1-4', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数1-5', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' }
-        ],
-        [
-          { courseName: '高数2-1', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数2-2', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数2-3', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数2-4', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数2-5', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' }
-        ],
-        [
-          { courseName: '高数3-1', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数3-2', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数3-3', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数3-4', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数3-5', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' }
-        ],
-        [
-          { courseName: '高数4-1', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数4-2', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数4-3', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数4-4', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数4-5', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' }
-        ],
-        [
-          { courseName: '高数5-1', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数5-2', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数5-3', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数5-4', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' },
-          { courseName: '高数5-5', week: [1, 2, 3], teacher: 'xxxx', classroom: '西404' }
-        ]
-
-      ],
+      list: [],
       list2: [
         [], [], [], [], []
       ]
@@ -95,11 +60,9 @@ export default {
   mounted() {},
   methods: {
     formatList() {
-      for (let index = 0; index < this.list.length; index++) {
-        for (let timeIndex = 0; timeIndex < 5; timeIndex++) {
-          this.list2[timeIndex][index] = this.list[index][timeIndex]
-        }
-      }
+      getCourse({ className: store.getters.className }).then(res => {
+        this.list2 = res.data
+      })
     },
     show(data) {
       if (data.week.indexOf(this.week) === -1) {
@@ -108,7 +71,7 @@ export default {
       return true
     },
     change(data) {
-      console.log(data)
+
     },
     handleDownload() {
       this.downloadLoading = true
@@ -118,7 +81,7 @@ export default {
         // const list = this.list
 
         // const data = this.formatJson(filterVal, list)
-        const data = this.aaa(this.list2)
+        const data = this.size(this.list2)
         excel.export_json_to_excel({
           header: tHeader,
           data,
@@ -129,11 +92,17 @@ export default {
         this.downloadLoading = false
       })
     },
-    aaa(data) {
-      const a = [['12'], ['34'], ['56'], ['78'], ['910']]
+    size(data) {
+      const a = [['1-2'], ['3-4'], ['5-6'], ['7-8'], ['9-10']]
       for (let index = 0; index < 5; index++) {
         for (let index1 = 0; index1 < 5; index1++) {
-          a[index].push(data[index][index1].courseName + '-' + data[index][index1].classroom)
+          if (data[index][index1].courseName === '') {
+            a[index].push('')
+          } else {
+            a[index].push(data[index][index1].courseName +
+          '-' + data[index][index1].classroom + '-【' +
+          data[index][index1].week + '】')
+          }
         }
       }
       return a

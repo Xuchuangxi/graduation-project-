@@ -23,7 +23,7 @@
     <MDinput v-model="postForm.summary" :maxlength="100" name="name">
       摘要
     </MDinput>
-    <Tinymce ref="editor" v-model="postForm.content" :height="400" class="tinymce" />
+    <Tinymce ref="editor" v-model="postForm.content" :height="400" class="tinymce1" />
   </div>
 </template>
 
@@ -64,7 +64,7 @@ export default {
   .input{
     width: 50%;
   }
-  .tinymce{
+  .tinymce1{
     margin-top: 20px;
   }
 }

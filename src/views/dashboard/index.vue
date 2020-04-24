@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ username }}</div>
+    <div class="dashboard-text">name: {{ username }} {{ id }}</div>
     <el-carousel :interval="3000" type="card" height="300px" arrow="never">
       <el-carousel-item v-for="(item,index) in banner" :key="index" class="ecarousel_item">
         <img :src="item.url" alt="">
@@ -62,16 +62,23 @@
           </el-tab-pane>
         </el-tabs>
       </el-col>
-      <el-col :span="12" />
+      <el-col :span="12">
+        <div class="chart-container">
+          <chart height="100%" width="100%" />
+        </div>
+      </el-col>
+
     </el-row>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Chart from '@/components/Charts/students'
 
 export default {
   name: 'Dashboard',
+  components: { Chart },
   data() {
     return {
       banner: [
@@ -107,7 +114,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'username'
+      'username',
+      'id'
     ])
   }
 }
@@ -156,5 +164,9 @@ export default {
       float: right;
     }
   }
+}
+.chart-container{
+  width: 100%;
+  height: 370px;
 }
 </style>
