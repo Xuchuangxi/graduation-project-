@@ -1,7 +1,7 @@
 <template>
   <div class="index">
-    <el-button style="width:100px;float:right;margin-left:30px" type="success">发布</el-button>
-    <el-button style="width:100px;float:right" type="warning">存档</el-button>
+    <el-button style="width:100px;float:right;margin-left:30px" type="success" @click="push">发布</el-button>
+    <el-button style="width:100px;float:right" type="warning" @click="commit">存档</el-button>
 
     <h1>学习资料</h1>
     <MDinput v-model="postForm.title" :maxlength="100" name="name" class="title">
@@ -13,7 +13,7 @@
       </el-col>
 
       <el-col :span="8">
-        时间：<el-date-picker v-model="postForm.time" type="datetime" class="input" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择时间" />
+        时间：<el-date-picker v-model="postForm.time" type="datetime" class="input" format="yyyy-MM-dd" placeholder="请选择时间" />
       </el-col>
 
       <el-col :span="8" style="float:left">
@@ -30,21 +30,50 @@
 <script>
 import Tinymce from '@/components/Tinymce'
 import MDinput from '@/components/MDinput'
+import { addArticle } from '@/api/article'
+import store from '@/store'
 export default {
   components: { Tinymce, MDinput },
   props: {},
   data() {
     return {
       postForm: {
-
       }
     }
   },
-  created() {},
-  mounted() {},
+  mounted() {
+    this.postForm.userId = store.getters.id
+  },
   methods: {
-    aaa() {
-      console.log(this.postForm)
+    push() {
+      this.postForm.status = 'public'
+      addArticle(this.postForm).then(res => {
+        this.postForm = { userId: store.getters.id, content: '' }
+        this.$message({
+          message: '文章发布成功',
+          type: 'success'
+        })
+      }).catch(() => {
+        this.$message({
+          message: '标题和作者是必填的',
+          type: 'error'
+        })
+      })
+    },
+    commit() {
+      this.postForm.status = 'draft'
+      addArticle(this.postForm).then(res => {
+        this.postForm = { userId: store.getters.id, content: '' }
+        this.$message({
+          message: '文章保存草稿成功',
+          type: 'success'
+        })
+      }).catch(() => {
+        this.$message({
+          message: '标题和作者是必填的',
+          type: 'error'
+        })
+      })
     }
   }
 }

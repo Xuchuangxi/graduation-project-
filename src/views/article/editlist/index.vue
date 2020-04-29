@@ -31,14 +31,19 @@
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="{row}">
-          <span>{{ row.title }}</span>
+          <router-link :to="'/example/edit/'+row.id" class="link-type">
+            <span>{{ row.title }}</span>
+          </router-link>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="120">
+      <el-table-column align="center" label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="open(scope.row)">
             详情
+          </el-button>
+          <el-button type="danger" size="small" @click="deletearticle(scope.row._id)">
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -54,7 +59,7 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import { getArticleList } from '@/api/article'
+import { getArticleList, deleteArticle } from '@/api/article'
 import Tinymce from '@/components/Tinymce'
 export default {
   name: 'ArticleList',
@@ -78,8 +83,7 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        limit: 10,
-        status: 'public'
+        limit: 10
       },
       drawer: false,
       clickMessage: {}
@@ -101,6 +105,15 @@ export default {
     open(data) {
       this.drawer = true
       this.clickMessage = data
+    },
+    deletearticle(data) {
+      deleteArticle({ _id: data }).then(res => {
+        this.getList()
+        this.$message({
+          message: '删除成功',
+          type: 'success'
+        })
+      })
     }
   }
 }

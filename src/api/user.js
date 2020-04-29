@@ -45,3 +45,27 @@ export function updataPassword(data) {
     data
   })
 }
+
+export function userInfoByName(data) {
+  return request({
+    url: '/user/userInfoByName',
+    method: 'post',
+    data
+  })
+}
+
+export function getUserList(data) {
+  return request({
+    url: '/user/getUserList',
+    method: 'post',
+    data
+  })
+}
+
+export function updateUserById(data) {
+  return request({
+    url: '/user/updateUserById',
+    method: 'post',
+    data
+  })
+}

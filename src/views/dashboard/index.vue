@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ username }} {{ id }}</div>
     <el-carousel :interval="3000" type="card" height="300px" arrow="never">
       <el-carousel-item v-for="(item,index) in banner" :key="index" class="ecarousel_item">
         <img :src="item.url" alt="">

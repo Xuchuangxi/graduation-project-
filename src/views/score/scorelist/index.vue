@@ -1,12 +1,12 @@
 <template>
   <div class="index">
     学年学期：
-    <el-select v-model="yearTerm" placeholder="请选择学年学期">
+    <el-select v-model="yearTerm" placeholder="请选择学年学期" @change="yearChange">
       <el-option
         v-for="item in yearTermList"
         :key="item.name"
         :label="item.name"
-        :value="item.name"
+        :value="item.value"
       />
     </el-select>
     <el-button style="margin:0 0 20px 20px;" type="primary" @click="handleDownload">
@@ -23,28 +23,42 @@
 </template>
 
 <script>
+import { getScoreById } from '@/api/score'
+import store from '@/store'
 export default {
   components: {},
   props: {},
   data() {
     return {
-      yearTerm: '',
+      yearTerm: 'gradeOneUp',
       yearTermList: [
-        { name: '大一第一学期' },
-        { name: '大一第二学期' },
-        { name: '大二第一学期' },
-        { name: '大二第二学期' },
-        { name: '大三第一学期' },
-        { name: '大三第二学期' }
+        { name: '大一第一学期', value: 'gradeOneUp' },
+        { name: '大一第二学期', value: 'gradeOneDown' },
+        { name: '大二第一学期', value: 'gradeTwoUp' },
+        { name: '大二第二学期', value: 'gradeTwoDown' },
+        { name: '大三第一学期', value: 'gradeThreeUp' },
+        { name: '大三第二学期', value: 'gradeThreeDown' },
+        { name: '大四第一学期', value: 'gradeFourUp' },
+        { name: '大四第二学期', value: 'gradeFourDown' }
+
       ],
-      gradeList: [
-        { name: '高数', sort: '专业课', hours: 32, credit: 2, point: 3.2 }
-      ]
+      gradeList: [],
+      allGradeList: {}
     }
   },
-  created() {},
-  mounted() {},
+  mounted() {
+    this.getList()
+  },
   methods: {
+    getList() {
+      getScoreById({ userId: store.getters.id }).then(res => {
+        this.allGradeList = res.data
+        this.gradeList = res.data.gradeOneUp
+      })
+    },
+    yearChange(data) {
+      this.gradeList = this.allGradeList[data]
+    },
     handleDownload() {
       console.log(this.yearTerm)
     }

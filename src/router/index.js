@@ -58,7 +58,9 @@ export const asyncRoutes = [
       {
         path: 'index',
         name: 'siz',
-        component: () => import('@/views/size/index')
+        component: () => import('@/views/size/index'),
+        meta: { title: '设置个人信息', roles: ['user', 'admin', 'super-admin'] },
+        hidden: true
       }
     ]
   },
@@ -71,19 +73,20 @@ export const asyncRoutes = [
         path: 'dashboard',
         name: '首页',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: '首页', icon: 'dashboard' }
+        meta: { title: '首页', icon: 'dashboard', roles: ['user', 'admin', 'super-admin'] }
       }
     ]
   },
   {
     path: '/personal',
     component: Layout,
+
     children: [
       {
         path: 'index',
         name: '个人资料',
         component: () => import('@/views/personal/index'),
-        meta: { title: '个人资料', icon: 'form' }
+        meta: { title: '个人资料', icon: 'user', roles: ['user', 'admin', 'super-admin'] }
       }
     ]
   },
@@ -94,24 +97,25 @@ export const asyncRoutes = [
     name: 'course',
     meta: {
       title: '课程',
-      icon: 'nested'
+      icon: 'education'
     },
     children: [
       {
         path: 'courselist',
         component: () => import('@/views/course/courselist/index'),
-        meta: { title: '课程表' }
+        meta: { title: '课程表', icon: 'list', roles: ['user', 'admin', 'super-admin'] }
       },
       {
         path: 'courseupdatalist',
         component: () => import('@/views/course/courseupdatalist/index'),
-        meta: { title: '上传课程表' }
+        meta: { title: '上传课程表', icon: 'edit', roles: ['admin', 'super-admin'] }
       },
       {
         path: 'edit/:id',
         component: () => import('@/views/course/edit/index'),
         name: 'edit',
-        meta: { title: '修改课程表', noCache: true, activeMenu: '/example/list' }
+        meta: { title: '修改课程表', noCache: true, roles: ['admin', 'super-admin'] },
+        hidden: true
 
       }
     ]
@@ -122,13 +126,18 @@ export const asyncRoutes = [
     name: 'score',
     meta: {
       title: '成绩',
-      icon: 'nested'
+      icon: 'star'
     },
     children: [
       {
         path: 'scorelist',
         component: () => import('@/views/score/scorelist/index'),
-        meta: { title: '成绩表' }
+        meta: { title: '成绩表', icon: 'nested', roles: ['user', 'admin', 'super-admin'] }
+      },
+      {
+        path: 'addscorelist',
+        component: () => import('@/views/score/addscorelist/index'),
+        meta: { title: '管理成绩表', icon: 'search', roles: ['admin', 'super-admin'] }
       }
     ]
   },
@@ -136,23 +145,43 @@ export const asyncRoutes = [
     path: '/article',
     component: Layout,
     name: ' article',
-    meta: { title: '共享社区', icon: 'example' },
+    meta: { title: '共享社区', icon: 'guide' },
     children: [
       {
         path: 'created',
         name: '新增文章',
         component: () => import('@/views/article/created/index'),
-        meta: { title: '新增文章', icon: 'table' }
+        meta: { title: '新增文章', icon: 'edit', roles: ['user', 'admin', 'super-admin'] }
       },
       {
         path: 'list',
         name: '文章列表',
         component: () => import('@/views/article/list/index'),
-        meta: { title: '文章列表', icon: 'tree' }
+        meta: { title: '文章列表', icon: 'list', roles: ['user', 'admin', 'super-admin'] }
+      },
+      {
+        path: 'editlist',
+        name: '管理文章',
+        component: () => import('@/views/article/editlist/index'),
+        meta: { title: '管理文章', icon: 'component', roles: ['admin', 'super-admin'] }
       }
     ]
   },
+  {
+    path: '/permission',
+    component: Layout,
+    name: ' 权限管理',
+    meta: { title: '权限管理', icon: 'example', roles: ['super-admin'] },
+    children: [
+      {
+        path: 'updatelist',
+        name: '修改权限',
+        component: () => import('@/views/permission/updatelist/index'),
+        meta: { title: '修改用户权限', icon: 'lock', roles: ['super-admin'] }
+      }
 
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

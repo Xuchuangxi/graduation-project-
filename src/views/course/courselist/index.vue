@@ -30,8 +30,8 @@
       </div>
       <div v-for="item in num" :key="item" class="tableContent">
         <div v-for="item1 in num" :key="item1" class="tableitem" @click="change(list2[item][item1])">
-          <p v-show="show(list2[item][item1])" class="pone">{{ list2[item][item1].courseName }} </p>
-          <p v-show="show(list2[item][item1])" class="ptwo">{{ list2[item][item1].classroom }} {{ list2[item][item1].teacher }}</p>
+          <p v-show="show(item,item1)" class="pone">{{ list2[item][item1].courseName }} </p>
+          <p v-show="show(item,item1)" class="ptwo">{{ list2[item][item1].classroom }} {{ list2[item][item1].teacher }}</p>
         </div>
       </div>
     </div>
@@ -50,22 +50,26 @@ export default {
       num: [0, 1, 2, 3, 4],
       list: [],
       list2: [
-        [], [], [], [], []
+        [{ week: '' }, { week: '' }, { week: '' }, { week: '' }, { week: '' }],
+        [{ week: '' }, { week: '' }, { week: '' }, { week: '' }, { week: '' }],
+        [{ week: '' }, { week: '' }, { week: '' }, { week: '' }, { week: '' }],
+        [{ week: '' }, { week: '' }, { week: '' }, { week: '' }, { week: '' }],
+        [{ week: '' }, { week: '' }, { week: '' }, { week: '' }, { week: '' }]
       ]
     }
   },
-  created() {
+  mounted() {
     this.formatList()
   },
-  mounted() {},
   methods: {
     formatList() {
       getCourse({ className: store.getters.className }).then(res => {
         this.list2 = res.data
       })
     },
-    show(data) {
-      if (data.week.indexOf(this.week) === -1) {
+    show(a, b) {
+      const data = this.list2[a][b].week
+      if (data.indexOf(this.week) === -1) {
         return false
       }
       return true
@@ -85,8 +89,8 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.filename,
-          autoWidth: this.autoWidth,
+          filename: '课程表',
+          autoWidth: true,
           bookType: this.bookType
         })
         this.downloadLoading = false
