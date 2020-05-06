@@ -19,7 +19,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="姓名"
           name="username"
           type="text"
           tabindex="1"
@@ -36,7 +36,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -46,6 +46,12 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
+
+      <el-radio-group v-model="loginForm.roles" class="roles">
+        <el-radio label="user">学生</el-radio>
+        <el-radio label="admin">教师</el-radio>
+        <el-radio label="super-admin">管理员</el-radio>
+      </el-radio-group>
       <el-button
         :loading="loading"
         type="primary"
@@ -53,7 +59,7 @@
         @click.native.prevent="handleLogin"
       >登 录</el-button>
 
-      <el-link class="tag" @click.native.prevent="register">注册</el-link>
+      <el-link class="tag" @click.native.prevent="register">注册账号</el-link>
     </el-form>
   </div>
 </template>
@@ -65,7 +71,8 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '111111',
+        roles: 'user'
       },
       loginRules: {
         username: { required: true, trigger: 'blur', message: '请输入用户名' },
@@ -166,6 +173,7 @@ $cursor: #fff;
     color: #454545;
   }
 }
+
 </style>
 
 <style lang="scss" scoped>
@@ -236,5 +244,10 @@ $light_gray: #eee;
 .tag {
   float: right;
   margin-right: 20px;
+  color: white;
+}
+.roles{
+  margin-bottom: 20px;
+  color:white;
 }
 </style>
