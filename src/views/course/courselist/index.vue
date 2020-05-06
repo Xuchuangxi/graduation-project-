@@ -10,7 +10,7 @@
       />
     </el-select>
     <el-button style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
-      Export Excel
+      导出课程表
     </el-button>
     <div class="table">
       <div class="tableTop">
@@ -89,7 +89,7 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: '课程表',
+          filename: store.getters.username + '课程表',
           autoWidth: true,
           bookType: this.bookType
         })

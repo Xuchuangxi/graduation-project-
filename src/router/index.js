@@ -164,6 +164,13 @@ export const asyncRoutes = [
         name: '管理文章',
         component: () => import('@/views/article/editlist/index'),
         meta: { title: '管理文章', icon: 'component', roles: ['admin', 'super-admin'] }
+      },
+      {
+        path: 'editarticle/:id',
+        name: '编辑文章',
+        component: () => import('@/views/article/editArticle/index'),
+        meta: { title: '编辑文章', icon: 'component', roles: ['user', 'admin', 'super-admin'] },
+        hidden: true
       }
     ]
   },

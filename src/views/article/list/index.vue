@@ -1,7 +1,11 @@
 
 <template>
   <div class="app-container">
-    <el-button style="margin-bottom:15px" type="primary">新建文章</el-button>
+    <el-button style="margin-bottom:15px" type="primary">
+      <router-link to="/article/created" class="link-type">
+        新建文章
+      </router-link>
+    </el-button>
     <el-table :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column width="180px" align="center" label="日期">
         <template slot-scope="scope">
@@ -24,7 +28,7 @@
       <el-table-column class-name="status-col" align="center" label="状态" width="110">
         <template slot-scope="{row}">
           <el-tag effect="dark" :type="row.status | statusFilter">
-            {{ row.status }}
+            {{ row.status | status }}
           </el-tag>
         </template>
       </el-table-column>
@@ -68,6 +72,13 @@ export default {
       }
       return statusMap[status]
     },
+    status(status) {
+      if (status === 'public') {
+        return '发布'
+      } else {
+        return '存档'
+      }
+    },
     time(data) {
       return new Date(data).toLocaleDateString()
     }
@@ -95,6 +106,8 @@ export default {
     getList() {
       getArticleList(this.listQuery).then(res => {
         this.list = res.data.list
+        console.log(res.data.list)
+
         this.total = res.data.total
       })
     },

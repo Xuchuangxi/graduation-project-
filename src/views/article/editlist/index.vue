@@ -24,7 +24,7 @@
       <el-table-column class-name="status-col" align="center" label="状态" width="110">
         <template slot-scope="{row}">
           <el-tag effect="dark" :type="row.status | statusFilter">
-            {{ row.status }}
+            {{ row.status | status }}
           </el-tag>
         </template>
       </el-table-column>
@@ -72,6 +72,13 @@ export default {
         deleted: 'danger'
       }
       return statusMap[status]
+    },
+    status(status) {
+      if (status === 'public') {
+        return '发布'
+      } else {
+        return '存档'
+      }
     },
     time(data) {
       return new Date(data).toLocaleDateString()

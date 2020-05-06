@@ -18,25 +18,46 @@
       </el-col>
       <el-col :span="18">
         <div class="user">
+
           <el-form ref="form" label-width="100px" style="font-size:20px">
-            <el-form-item label="用户名:">
-              {{ userInfo.username }}
-            </el-form-item>
-            <el-form-item label="班级:">
-              {{ userInfo.className }}
-            </el-form-item>
-            <el-form-item label="学号:">
-              {{ userInfo.studentID }}
-            </el-form-item>
-            <el-form-item label="电话号码:">
-              {{ userInfo.phoneNumber }}
-            </el-form-item>
-            <el-form-item label="性别:">
-              {{ userInfo.sex === 0?'男':'女' }}
-            </el-form-item>
-            <el-form-item label="电子邮箱:">
-              {{ userInfo.email }}
-            </el-form-item>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="用户名:">
+                  {{ userInfo.username }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="班级:">
+                  {{ userInfo.className }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="学号:">
+                  {{ userInfo.studentID }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="电话号码:">
+                  {{ userInfo.phoneNumber }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="性别:">
+                  {{ userInfo.sex === 0?'男':'女' }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="电子邮箱:">
+                  {{ userInfo.email }}
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="个人介绍:">
               {{ userInfo.introduce }}
             </el-form-item>
@@ -48,6 +69,50 @@
         </div>
       </el-col>
     </el-row>
+    <div style="margin-bottom:10px"><el-tag effect="dark" type="info">我的文章</el-tag></div>
+    <el-table :data="list" border fit highlight-current-row style="width: 100%">
+      <el-table-column width="180px" align="center" label="日期">
+        <template slot-scope="scope">
+          <span>{{ scope.row.time |time }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="120px" align="center" label="作者">
+        <template slot-scope="scope">
+          <span>{{ scope.row.author }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="150px" align="center" label="推荐等级">
+        <template slot-scope="scope">
+          <el-rate v-model="scope.row.recommend" disabled />
+        </template>
+      </el-table-column>
+
+      <el-table-column class-name="status-col" align="center" label="状态" width="110">
+        <template slot-scope="{row}">
+          <el-tag effect="dark" :type="row.status | statusFilter">
+            {{ row.status | status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column min-width="300px" label="标题">
+        <template slot-scope="{row}">
+          <span>{{ row.title }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="操作" width="120">
+        <template slot-scope="scope">
+          <router-link :to="'/article/editarticle/'+scope.row._id">
+            <el-button type="primary" size="mini">
+              编辑
+            </el-button>
+          </router-link>
+        </template>
+      </el-table-column>
+    </el-table>
     <el-dialog title="修改信息" :visible.sync="editMessageWindow" width="30%">
       <el-form ref="form" :model="userInfo" label-width="100px">
         <el-form-item label="用户名:">
@@ -102,8 +167,29 @@
 <script>
 import { getInfo, updateUser, updataPassword } from '@/api/user'
 import { getToken } from '@/utils/auth'
+import { getArticleByuserId } from '@/api/article'
 import store from '@/store'
 export default {
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        public: 'success',
+        draft: 'info',
+        deleted: 'danger'
+      }
+      return statusMap[status]
+    },
+    status(status) {
+      if (status === 'public') {
+        return '发布'
+      } else {
+        return '存档'
+      }
+    },
+    time(data) {
+      return new Date(data).toLocaleDateString()
+    }
+  },
 
   data() {
     var validatePass = (rule, value, callback) => {
@@ -128,7 +214,8 @@ export default {
         oldpass: { required: true, message: '请输入旧密码', trigger: 'blur' },
         newpass: { required: true, message: '请输入新密码', trigger: 'blur' },
         checkPass: { required: true, validator: validatePass, trigger: 'blur' }
-      }
+      },
+      list: []
     }
   },
   created() {
@@ -139,6 +226,10 @@ export default {
     getUserinfo() {
       getInfo().then(res => {
         this.userInfo = res.data
+      })
+
+      getArticleByuserId({ userId: store.getters.id }).then(res => {
+        this.list = res.data
       })
     },
     // 编辑信息弹窗按钮

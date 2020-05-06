@@ -5,7 +5,7 @@
         <el-input v-model="message.userName" />
       </el-form-item>
       <el-form-item label="学年学期：">
-        <el-select v-model="message.yearTerm" placeholder="请选择学年学期">
+        <el-select v-model="message.yearTerm" placeholder="请选择学年学期" @change="search">
           <el-option
             v-for="item in yearTermList"
             :key="item.name"
@@ -18,7 +18,7 @@
         <el-button type="primary" @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button v-show="gradeList.length>0" type="primary" @click="add">添加课程成绩</el-button>
+        <el-button v-show="showBtn" type="primary" @click="add">添加课程成绩</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="gradeList" border>
@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       id: '',
+      showBtn: false,
       message: {},
       yearTermList: [
         { name: '大一第一学期', value: 'gradeOneUp' },
@@ -99,13 +100,11 @@ export default {
     }
   },
   methods: {
-    handleDownload() {
-      console.log(this.yearTerm)
-    },
     search() {
       userInfoByName({ username: this.message.userName }).then(res => {
         this.id = res.data.id
         getScoreById({ userId: res.data.id }).then(res => {
+          this.showBtn = true
           this.gradeList = res.data[this.message.yearTerm]
         })
       })
@@ -115,7 +114,6 @@ export default {
       this.dialogVisible = true
     },
     // 删除课程成绩
-
     deleteGrade(del) {
       const newdata = this.gradeList.filter(item => {
         return item !== del
