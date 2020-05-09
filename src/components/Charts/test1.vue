@@ -48,8 +48,8 @@ export default {
     initChart() {
       this.chart = echarts.init(document.getElementById(this.id))
 
-      var name_title = '中国人民大学2017年各省市计划录取人数'
-      var subname = '数据爬取自千栀网\n，\n上海、浙江无文理科录取人数'
+      var name_title = '广东石油化工学院各省人数分布图'
+      var subname = ''
       var nameColor = ' rgb(55, 75, 113)'
       var name_fontFamily = '等线'
       var subname_fontSize = 15
@@ -84,7 +84,7 @@ export default {
         { name: '青海', value: 10 },
         { name: '宁夏', value: 18 },
         { name: '新疆', value: 67 },
-        { name: '广东', value: 123 },
+        { name: '广东', value: 4160 },
         { name: '广西', value: 59 },
         { name: '海南', value: 14 }
       ]
@@ -134,12 +134,6 @@ export default {
         // 地区经纬度
         geoCoordMap[name] = v.properties.cp
       })
-
-      // console.log("============geoCoordMap===================")
-      // console.log(geoCoordMap)
-      // console.log("================data======================")
-      console.log(data)
-      console.log(toolTipData)
       var max = 480
       var min = 9 // todo
       var maxSize4Pin = 100
@@ -149,6 +143,7 @@ export default {
         var res = []
         for (var i = 0; i < data.length; i++) {
           var geoCoord = geoCoordMap[data[i].name]
+
           if (geoCoord) {
             res.push({
               name: data[i].name,
@@ -189,7 +184,6 @@ export default {
                   }
                 }
                 console.log(toolTiphtml)
-                // console.log(convertData(data))
                 return toolTiphtml
               } else {
                 var toolTiphtml5 = ''
@@ -202,7 +196,6 @@ export default {
                   }
                 }
                 console.log(toolTiphtml5)
-                // console.log(convertData(data))
                 return toolTiphtml5
               }
             }
@@ -282,6 +275,9 @@ export default {
             coordinateSystem: 'geo',
             data: convertData(data),
             symbolSize: function(val) {
+              if (val[2] > 1000) {
+                return val[2] / 200
+              }
               return val[2] / 10
             },
             label: {
@@ -339,10 +335,13 @@ export default {
               var a = (maxSize4Pin - minSize4Pin) / (max - min)
               var b = minSize4Pin - a * min
               b = maxSize4Pin - a * max
-              return a * val[2] + b
+              return a * val[0] + b
             },
             label: {
               normal: {
+                formatter: function(obj) {
+                  return obj.data.value[2]
+                },
                 show: true,
                 textStyle: {
                   color: '#fff',
@@ -355,7 +354,7 @@ export default {
                 color: '#F62157' // 标志颜色
               }
             },
-            zlevel: 6,
+            zlevel: 10,
             data: convertData(data)
           },
           {
@@ -366,6 +365,9 @@ export default {
               return b.value - a.value
             }).slice(0, 5)),
             symbolSize: function(val) {
+              if (val[2] > 1000) {
+                return val[2] / 200
+              }
               return val[2] / 10
             },
             showEffectOn: 'render',

@@ -48,23 +48,23 @@ export default {
       this.chart = echarts.init(document.getElementById(this.id))
       var scale = 1
       var echartData = [{
-        value: 2154,
+        value: 720,
         name: '电信学院'
       }, {
-        value: 3854,
+        value: 1680,
         name: '自动化学院'
       }, {
         value: 3515,
+        name: '机电学院'
+      }, {
+        value: 1200,
         name: '计算机'
       }, {
-        value: 3515,
-        name: '体育学院'
-      }, {
-        value: 3854,
-        name: '文法学院'
+        value: 9854,
+        name: '其他学院'
       }, {
         value: 2154,
-        name: '经管学院'
+        name: '石油工程学院'
       }]
       var rich = {
         yellow: {
@@ -137,7 +137,7 @@ export default {
             type: 'pie',
             radius: ['42%', '50%'],
             hoverAnimation: false,
-            color: ['#c487ee', '#deb140', '#49dff0', '#034079', '#6f81da', '#00ffb4'],
+            color: ['#c487ee', '#deb140', '#49dff0', '#034079', 'yellow', '#006fb4'],
             label: {
               normal: {
                 formatter: function(params, ticket, callback) {

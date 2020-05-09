@@ -24,7 +24,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <div class="name">您好：{{ username }}同学</div>
+    <div class="name">您好：{{ username }}{{ identity }}</div>
   </div>
 </template>
 
@@ -41,20 +41,34 @@ export default {
   },
   data() {
     return {
-      userInfo: {}
+      userInfo: {},
+      identity: ''
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'username'
+      'username',
+      'roles'
     ])
   },
   created() {
     this.getUserinfo()
   },
+  mounted() {
+    this.getrole()
+  },
   methods: {
+    getrole() {
+      if (this.roles.indexOf('super-admin') !== -1) {
+        this.identity = '管理员'
+      } else if (this.roles.indexOf('admin') !== -1) {
+        this.identity = '老师'
+      } else {
+        this.identity = '同学'
+      }
+    },
     getUserinfo() {
       getInfo().then(res => {
         this.userInfo = res.data

@@ -69,3 +69,11 @@ export function updateUserById(data) {
     data
   })
 }
+
+export function adminAddUsers(data) {
+  return request({
+    url: '/user/adminAddUsers',
+    method: 'post',
+    data
+  })
+}

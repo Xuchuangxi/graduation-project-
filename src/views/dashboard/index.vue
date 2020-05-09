@@ -68,6 +68,7 @@
       </el-col>
 
     </el-row>
+    <div class="bottom">Copyright © 2020 广东石油化工学院 | 京ICP备16010358号-2</div>
   </div>
 </template>
 
@@ -107,7 +108,8 @@ export default {
 
         { name: '探索高水平科技成果与企业实际需求的精准对接机制', url: 'https://s.cloud.gmw.cn/gmrb/c/2020-03-31/1380173.shtml', time: '2020-4-1' }
 
-      ]
+      ],
+      identity: ''
 
     }
   },
@@ -115,7 +117,11 @@ export default {
     ...mapGetters([
       'username',
       'id'
+
     ])
+  },
+
+  methods: {
   }
 }
 </script>
@@ -148,7 +154,7 @@ export default {
   }
 }
 .card{
-  height: 300px;
+  height: 350px;
   p{
     height: 25px;
     line-height: 25px;
@@ -166,6 +172,11 @@ export default {
 }
 .chart-container{
   width: 100%;
-  height: 370px;
+  height: 420px;
+}
+.bottom{
+  color: rgba(24, 10, 10, 0.8);
+  padding: 40px 0 10px;
+  text-align: center;
 }
 </style>

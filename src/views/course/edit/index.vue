@@ -65,7 +65,15 @@
 import { getCourseById, updateCourse } from '@/api/course'
 export default {
   filters: {
-
+    times(data) {
+      let time = ''
+      const map = ['一', '二', '三', '四', '五']
+      data.forEach(item => {
+        const index = item.split('-')
+        time += (`星期${map[Number(index[0]) - 1]}第${index[1]}节/  `)
+      })
+      return time
+    },
     weeks(data) {
       let week = ''
       data.forEach(item => {
