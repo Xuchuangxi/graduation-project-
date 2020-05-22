@@ -78,12 +78,12 @@ export const asyncRoutes = [
       {
         path: 'courselist',
         component: () => import('@/views/course/courselist/index'),
-        meta: { title: '课程表', icon: 'list', roles: ['user', 'admin', 'super-admin'] }
+        meta: { title: '课程表', icon: 'list', roles: ['user', 'super-admin'] }
       },
       {
         path: 'courseupdatalist',
         component: () => import('@/views/course/courseupdatalist/index'),
-        meta: { title: '上传课程表', icon: 'edit', roles: ['admin', 'super-admin'] }
+        meta: { title: '管理课程表', icon: 'edit', roles: ['admin', 'super-admin'] }
       },
       {
         path: 'edit/:id',
@@ -107,7 +107,7 @@ export const asyncRoutes = [
       {
         path: 'scorelist',
         component: () => import('@/views/score/scorelist/index'),
-        meta: { title: '成绩表', icon: 'nested', roles: ['user', 'admin', 'super-admin'] }
+        meta: { title: '成绩表', icon: 'nested', roles: ['user', 'super-admin'] }
       },
       {
         path: 'addscorelist',

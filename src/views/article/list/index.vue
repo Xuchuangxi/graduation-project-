@@ -89,7 +89,7 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 8,
         status: 'public'
       },
       drawer: false,

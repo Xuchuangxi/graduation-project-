@@ -25,7 +25,7 @@
           <span>{{ scope.row.createdDate | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" label="操作" width="250px">
         <template slot-scope="scope">
           <router-link :to="'/course/edit/'+scope.row._id">
             <el-button type="primary" size="mini">

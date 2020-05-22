@@ -133,6 +133,7 @@ export default {
               rowTable.classroom = sheetArray[item].教室
               rowTable.time = sheetArray[item].上课时间.split('，')
               rowTable.week = sheetArray[item].上课周数.split('，')
+
               this.listTable.push(rowTable)
             }
           }
@@ -157,6 +158,14 @@ export default {
       if (this.listTable.length === 0) {
         return this.$message.warning('请先点击下方上传1个xlsx文件')
       }
+
+      this.listTable.forEach(item => {
+        const arr = []
+        item.week.forEach(a => {
+          arr.push(Number(a))
+        })
+        item.week = arr
+      })
       addCourse({ courseList: this.listTable, className: this.form.className, college: this.form.college, creator: this.$store.getters.username }).then(res => {
         this.$message.success('上传到数据库成功')
         this.listTable = []

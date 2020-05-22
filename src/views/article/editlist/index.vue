@@ -3,19 +3,19 @@
   <div class="app-container">
     <el-button style="margin-bottom:15px" type="primary">新建文章</el-button>
     <el-table :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column width="180px" align="center" label="日期">
+      <el-table-column align="center" label="日期">
         <template slot-scope="scope">
           <span>{{ scope.row.time |time }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="作者">
+      <el-table-column align="center" label="作者">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="推荐等级">
+      <el-table-column align="center" label="推荐等级">
         <template slot-scope="scope">
           <el-rate v-model="scope.row.recommend" disabled />
         </template>
@@ -29,7 +29,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" label="标题">
+      <el-table-column min-width="150px" label="标题">
         <template slot-scope="{row}">
           <router-link :to="'/example/edit/'+row.id" class="link-type">
             <span>{{ row.title }}</span>
@@ -90,7 +90,7 @@ export default {
       total: 0,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 8
       },
       drawer: false,
       clickMessage: {}

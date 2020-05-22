@@ -19,7 +19,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="姓名"
+          placeholder="邮箱"
           name="username"
           type="text"
           tabindex="1"
@@ -70,12 +70,12 @@ export default {
   data() {
     return {
       loginForm: {
-        username: 'admin',
+        username: 'admin@qq.com',
         password: '111111',
         roles: 'user'
       },
       loginRules: {
-        username: { required: true, trigger: 'blur', message: '请输入用户名' },
+        username: { required: true, trigger: 'blur', message: '请输入邮箱名' },
         password: { required: true, trigger: 'blur', message: '请输入密码' }
       },
       loading: false,
@@ -185,17 +185,18 @@ $light_gray: #eee;
   min-height: 100%;
   width: 100%;
   background-color: $bg;
-  background-image: url(../../assets/backgroundImage/背景图片.jpg);
+  background-image: url(../../assets/backgroundImage/背景图片2.jpg);
   background-size: 100% 100%;
   overflow: hidden;
 
   .login-form {
     position: absolute;
-    right: 0;
+    bottom: 150px;
+    right: 170px;
     width: 350px;
-    height: 100%;
+    height: 400px;
     max-width: 100%;
-    padding: 100px 35px 0;
+    padding: 20px 35px;
     margin: 0 auto;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.7);

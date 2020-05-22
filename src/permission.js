@@ -12,19 +12,14 @@ const whiteList = ['/login', '/auth-redirect', '/register']
 
 router.beforeEach(async(to, from, next) => {
   NProgress.start()
-
   document.title = getPageTitle(to.meta.title)
-
   const hasToken = getToken()
-
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     } else {
-      // determine whether the user has obtained his permission roles through getInfo
-
       if (store.getters.className === '' && to.path !== '/size/index' && store.getters.roles.length > 0) {
         next('/size/index')
         NProgress.done()
